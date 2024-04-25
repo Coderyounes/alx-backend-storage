@@ -1,5 +1,6 @@
 -- SQL File Code Create Table user
-Create Table IF NOT EXISTS users (
+DROP TABLE IF EXISTS users;
+Create Table users (
     id int NOT NULL AUTO_INCREMENT,
     email varchar(255) NOT NULL UNIQUE,
     name varchar(255)
