@@ -1,4 +1,4 @@
---- SQL Code Update email
+-- SQL Code Update email
 DELIMITER //
 
 CREATE TRIGGER reset_valid_email AFTER UPDATE ON users
