@@ -1,5 +1,5 @@
 -- SQL File CODE Ranked the oldest bands
-SELECT band_name, (IFNULL(split, 2020) - formed) AS lifespan
+SELECT band_name, (IFNULL(split, '2020') - formed) AS lifespan
 FROM metal_bands
-WHERE style LIKE '%Glam rock%'
+WHERE FIND_IN_SET('Glam rock', IFNULL(style, "")) > 0
 ORDER BY lifespan DESC;
