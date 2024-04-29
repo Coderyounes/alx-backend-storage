@@ -1,0 +1,2 @@
+// List All Document in Certain Collection
+db.school.find().pretty()
