@@ -24,8 +24,7 @@ def print_nginx_request_logs(nginx_collection):
     ))
     print('{} status check'.format(status_checks_count))
 
-
-client = MongoClient('mongodb://127.0.0.1:27017')
-nginx_collection = client.logs.nginx
-
-print_nginx_request_logs(nginx_collection)
+if __name__ == '__main__':
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    nginx_collection = client.logs.nginx
+    print_nginx_request_logs(nginx_collection)
