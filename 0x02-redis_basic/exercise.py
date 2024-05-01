@@ -7,6 +7,13 @@ from typing import Union, Callable
 
 
 class Cache:
+    """
+    Represents a cache that stores data in Redis.
+
+    Attributes:
+        _redis (redis.Redis): The Redis connection object.
+    """
+
     def __init__(self):
         """
         Initializes a new instance of the Cache class.
@@ -20,30 +27,53 @@ class Cache:
         Stores the given data in Redis with a randomly generated key.
 
         Args:
-            data: The data to be stored.
+            data (Union[str, bytes, int, float]): The data to be stored.
 
         Returns:
-            The randomly generated key used to store the data in Redis.
+            str: The randomly generated key used to store the data in Redis.
         """
         randomkey = str(uuid4())
         self._redis.set(randomkey, data)
         return randomkey
 
     def get(self, key: str,
-            fn: Callable = None) -> Union[str, bytes, int, float]:
-        if fn:
-            return fn(key)
-        return key
+            fn: Callable = None) -> Union[str, bytes, float, int, None]:
+        """
+        Retrieves the data stored in Redis with the specified key.
+
+        Args:
+            key (str): The key used to store the data in Redis.
+            fn : A function to apply to the retrieved data. Defaults to None.
+
+        Returns:
+            The retrieved data,
+            optionally transformed by the provided function.
+        """
+        data = self._redis.get(key)
+        if data is None:
+            return None
+        return fn(data) if fn else data
 
     def get_str(self, key: str) -> str:
-        data = self.get(key)
-        if isinstance(data, bytes):
-            return data.decode('utf-8')
-        return str(data)
+        """
+        Retrieves a string value stored in Redis with the specified key.
+
+        Args:
+            key (str): The key used to store the string value in Redis.
+
+        Returns:
+            str: The retrieved string value.
+        """
+        return self.get(key, fn=lambda x: x.decode('utf-8'))
 
     def get_int(self, key: str) -> int:
-        data = self.get(key)
-        if data:
-            return int(data)
-        else:
-            return 0
+        """
+        Retrieves an integer value stored in Redis with the specified key.
+
+        Args:
+            key (str): The key used to store the integer value in Redis.
+
+        Returns:
+            int: The retrieved integer value.
+        """
+        return self.get(key, fn=lambda x: int(x))
